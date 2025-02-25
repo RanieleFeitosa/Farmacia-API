@@ -1,7 +1,7 @@
 # Farmácia API
 ![Java](https://img.shields.io/badge/Java-17-blue) ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen) ![Maven](https://img.shields.io/badge/Maven-Build-orange) ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue) ![Hibernate](https://img.shields.io/badge/Hibernate-ORM-yellowgreen)
 
-[Sobre o Projeto](#sobre-o-projeto) | [Tecnologias Utilizadas](#tecnologias-utilizadas) | [Funcionalidades](#funcionalidades) | [Estrutura do Projeto](#estrutura-do-projeto) | [Práticas Adotadas](#práticas-adotadas) | [Endpoints da API](#endpoints-da-api) | [Regras de Negócio Implementadas](#regras-de-negócio-implementadas) | [Diagrama de Classes](#diagrama-de-classes) | [Pré-requisitos](#pré-requisitos) | [Como Executar o Projeto](#como-executar-o-projeto) | [Como Executar na IDE](#como-executar-na-ide)
+[Sobre o Projeto](#sobre-o-projeto) | [Tecnologias Utilizadas](#tecnologias-utilizadas) | [Funcionalidades](#funcionalidades) | [Diagrama de Classes](#diagrama-de-classes) | [Estrutura do Projeto](#estrutura-do-projeto) | [Práticas Adotadas](#práticas-adotadas) | [Endpoints da API](#endpoints-da-api) | [Regras de Negócio Implementadas](#regras-de-negócio-implementadas) | [Pré-requisitos](#pré-requisitos) | [Como Executar o Projeto](#como-executar-o-projeto) | [Como Executar na IDE](#como-executar-na-ide)
 
 
 
@@ -22,7 +22,24 @@ Esta é uma API REST desenvolvida em **Java** com **Spring Boot** para gerenciar
 - Associa medicamentos a um laboratório específico.
 - A aplicação permite que laboratórios cadastrem seus medicamentos, armazenando dados como nome, lote, data de fabricação, data de validade, preço de custo, preço de venda e quantidade em estoque.
 - Tratamento de respostas de erro com  exceções personalizadas.
+## Diagrama de Classes
 
+```plaintext
++----------------+                 +----------------+  
+|  Laboratorio   |                 |  Medicamento   |  
++----------------+                 +----------------+  
+| - cnpj         |                 | - id           |  
+| - nome         |                 | - nome         |  
+| - endereco     |  1          N   | - lote         |  
+| - email        | --------------- | - fabricacao   |  
+| - telefone     |                 | - validade     |  
++----------------+                 | - precoCusto   |  
+| + get/set()    |                 | - precoVenda   |  
++----------------+                 | - quantidade   |  
+                                   +----------------+  
+                                   | + get/set()    |  
+                                   +----------------+  
+```
 
 ## Estrutura do Projeto
 
@@ -77,25 +94,6 @@ Esta é uma API REST desenvolvida em **Java** com **Spring Boot** para gerenciar
    - `QuantidadeNegativaExcecao` - Quando a quantidade de medicamentos é inválida.
    - `DatasInvalidasExcecao` - Quando as datas de fabricação e validade estão incorretas.
 
-
-## Diagrama de Classes
-
-```plaintext
-+----------------+                 +----------------+  
-|  Laboratorio   |                 |  Medicamento   |  
-+----------------+                 +----------------+  
-| - cnpj         |                 | - id           |  
-| - nome         |                 | - nome         |  
-| - endereco     |  1          N   | - lote         |  
-| - email        | --------------- | - fabricacao   |  
-| - telefone     |                 | - validade     |  
-+----------------+                 | - precoCusto   |  
-| + get/set()    |                 | - precoVenda   |  
-+----------------+                 | - quantidade   |  
-                                   +----------------+  
-                                   | + get/set()    |  
-                                   +----------------+  
-```
 ## Pré-requisitos
 - Java 17
 - Maven

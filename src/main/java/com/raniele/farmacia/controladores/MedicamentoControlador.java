@@ -1,7 +1,6 @@
 package com.raniele.farmacia.controladores;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,44 +24,31 @@ public class MedicamentoControlador {
 	@Autowired
 	private MedicamentoServicos servico;
 
-	@GetMapping
+	@GetMapping // encontrar todos
 	public ResponseEntity<List<Medicamento>> encontrarTodosOsMedicamentos() {
 		return ResponseEntity.ok(servico.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id}") // encontrar por id
 	public ResponseEntity<Medicamento> encontrarMedicamentosPorId(@PathVariable Long id) {
-		Optional<Medicamento> med = servico.findById(id);
-
-		if (med.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(med.get());
+		Medicamento med = servico.findById(id);
+		return ResponseEntity.ok(med);
 	}
 
-	@PostMapping
-	public ResponseEntity<Medicamento> salvar(@RequestBody Medicamento salvar) {
-		Medicamento novoMedicamento = servico.salvar(salvar);
-
+	@PostMapping // criar um medicamento
+	public ResponseEntity<Medicamento> criacao(@RequestBody Medicamento create) {
+		Medicamento novoMedicamento = servico.criar(create);
 		return ResponseEntity.status(HttpStatus.CREATED).body(novoMedicamento);
 	}
 
-	@PatchMapping("/{id}")
+	@PatchMapping("/{id}") // atualizar um medicamento
 	public ResponseEntity<Medicamento> atualizar(@PathVariable Long id, @RequestBody Medicamento atualizar) {
-		if (servico.findById(id).isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
 		Medicamento novoMedicamento = servico.atualizacao(id, atualizar);
 		return ResponseEntity.ok().body(novoMedicamento);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}") // deletar um medicamento
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		if (servico.findById(id).isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
 		servico.deletar(id);
 		return ResponseEntity.noContent().build();
 	}

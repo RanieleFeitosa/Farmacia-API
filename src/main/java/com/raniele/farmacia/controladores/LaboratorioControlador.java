@@ -1,8 +1,6 @@
 package com.raniele.farmacia.controladores;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,41 +23,30 @@ public class LaboratorioControlador {
 	@Autowired
 	private LaboratorioServicos servico;
 
-	@GetMapping
+	@GetMapping // encontrar todos
 	public ResponseEntity<List<Laboratorio>> acharTodos() {
 		return ResponseEntity.ok(servico.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id}") // encontrar por id
 	public ResponseEntity<Laboratorio> acharLaboratorioPorId(@PathVariable String id) {
-		Optional<Laboratorio> lab = servico.findById(id);
-
-		if (lab.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(lab.get());
+		Laboratorio lab = servico.findById(id);
+		return ResponseEntity.ok(lab);
 	}
 
-	@PostMapping
-	public ResponseEntity<Laboratorio> salvar(@RequestBody Laboratorio lab) {
-		Laboratorio laboratorioSalvo = servico.save(lab);
-		return ResponseEntity.status(HttpStatus.CREATED).body(laboratorioSalvo);
+	@PostMapping // criar laboratório
+	public ResponseEntity<Laboratorio> criacao(@RequestBody Laboratorio lab) {
+		Laboratorio laboratorioCriado = servico.criar(lab);
+		return ResponseEntity.status(HttpStatus.CREATED).body(laboratorioCriado);
 	}
 
-	@PatchMapping("/{id}")
+	@PatchMapping("/{id}") // atualizar laboratório
 	public ResponseEntity<Laboratorio> atualizar(@PathVariable String id, @RequestBody Laboratorio atualizacao) {
-		if (servico.findById(id).isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
 		return ResponseEntity.ok(servico.atualizar(id, atualizacao));
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}") // deletar laboratório
 	public ResponseEntity<Void> deletar(@PathVariable String id) {
-		if (servico.findById(id).isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
 		servico.delete(id);
 		return ResponseEntity.noContent().build();
 	}

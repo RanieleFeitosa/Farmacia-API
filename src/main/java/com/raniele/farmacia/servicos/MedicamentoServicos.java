@@ -1,7 +1,6 @@
 package com.raniele.farmacia.servicos;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,29 +18,31 @@ public class MedicamentoServicos {
 	@Autowired
 	private MedicamentoRepositorio repositorio;
 
-	public List<Medicamento> findAll() {
+	public List<Medicamento> findAll() { // encontrar todos
 		return repositorio.findAll();
 	}
 
-	public Optional<Medicamento> findById(Long id) {
-		return repositorio.findById(id);
+	public Medicamento findById(Long id) { // encontrar por id
+		return repositorio.findById(id)
+				.orElseThrow(() -> new RecursoNaoEncontradoExcecao("Medicamento não encontrado!"));
 	}
 
-	public Medicamento salvar(Medicamento salvar) {
+	public Medicamento criar(Medicamento create) { // criar um medicamento
 
-		if (salvar.getPrecoDeCusto() > salvar.getPrecoDeVenda()) {
+		if (create.getPrecoDeCusto() > create.getPrecoDeVenda()) {
 			throw new PrecoInvalidoExcecao("Preço de custo não pode ser maior que preço de venda.");
-		} else if (salvar.getPrecoDeVenda() <= 0) {
+		} else if (create.getPrecoDeVenda() <= 0) {
 			throw new PrecoInvalidoExcecao("Preço de venda não pode ser estar zerado nem ser negativo.");
-		} else if (salvar.getQuantidade() < 1) {
+		} else if (create.getQuantidade() < 1) {
 			throw new QuantidadeNegativaExcecao("O sistema não aceita que o campo quantidade esteja zerado.");
-		} else if (salvar.getFabricacao().isAfter(salvar.getValidade())) {
+		} else if (create.getFabricacao().isAfter(create.getValidade())) {
 			throw new DatasInvalidasExcecao("A data de fabricação não pode ser maior que a data de validade.");
 		}
 
-		return repositorio.save(salvar);
+		return repositorio.save(create);
 	}
 
+	// atualizar medicamentos
 	public Medicamento atualizacao(Long id, Medicamento medicamento) {
 
 		Medicamento entidade = repositorio.findById(id)
@@ -75,7 +76,7 @@ public class MedicamentoServicos {
 		return repositorio.save(entidade);
 	}
 
-	public void deletar(Long id) {
+	public void deletar(Long id) { // deletar medicamentos
 		if (!repositorio.existsById(id)) {
 			throw new RecursoNaoEncontradoExcecao("Esse lote não existe!");
 		}
